@@ -13,6 +13,9 @@ from gtts import gTTS
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+MONTHS = ["january", "february", "march", "april", "may", "june","july", "august", "september","october", "november", "december"]
+DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+DAY_EXTENTIONS = ["rd", "th", "st", "nd"]
 
 def speak(text):
     tts = gTTS(text=text, lang = 'en')
@@ -86,6 +89,24 @@ def get_events(n, serivice):
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary'])
+
+
+def get_date(text):
+    text = text.lower()
+    today = datetime.date.today()
+    if text.count('today')>0:
+        return today
+    day = -1
+    day_of_week = -1 
+    month = -1
+    year = today.year
+
+    for word in text.split():
+        if word in MONTHS:
+            month = MONTHS.index(month) + 1
+        elif word in DAYS:
+            day = DAYS.index(day) + 1
+        
 
 service = authenticate_google()
 get_events(2,service)
